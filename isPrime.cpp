@@ -26,7 +26,7 @@ int countPrime(int n) {
         for(long long j = (long long)i * i; j < n; j += i) {
             isPrime[j] = 0;
         }
-    }
+    }//时间复杂度 O(n log log n)
     return ans;
 }
 int main(){
