@@ -1,7 +1,69 @@
+## 蓝桥杯题号：549. 扫雷
+```cpp
+#include <iostream>
+#include <bits/stdc++.h>
+using namespace std;
+#define N 105
+int g[N][N], v[N][N];
+int n, m;
+int dx[8] = {0, 1, 0, -1, 1, 1, -1, -1};
+int dy[8] = {1, 0, -1, 0, 1, -1, 1, -1};
+struct Node {
+    int x, y;
+};
+void bfs() {
+    queue<Node> que;
+    que.push({1, 1});
+    v[1][1]=1;
+    while(!que.empty()) {
+        Node temp = que.front();
+        que.pop();
+        int sum=0;
+        int x = temp.x, y = temp.y;
+        for(int i=0; i<8; i++) {
+            int nx = x+dx[i], ny = y+dy[i];
+            if(nx>=1 && nx<=n && ny>=1 && ny<=m && g[nx][ny]==9) {
+                sum++;
+            }
+            if(nx>=1 && nx<=n && ny>=1 && ny<=m && v[nx][ny]==0) {
+                que.push({nx, ny});
+                v[nx][ny]=1;
+                // cout << nx << "," << ny << "|";
+            }
+        }
+        // cout << "=";
+        if(g[x][y]!=9) g[x][y]=sum;
+    }
+}
+int main()
+{
+    
+    cin >> n >> m;
+    for(int i=1; i<=n ;i++) {
+        for(int j=1; j<=m; j++){
+            cin >> g[i][j];
+            if(g[i][j]==1) g[i][j]=9;
+        }
+    }
+    bfs();
+    // cout << endl;
+    for(int i=1; i<=n ;i++) {
+        for(int j=1; j<=m; j++){
+            cout << g[i][j] << " ";
+        }
+        cout << endl;
+    }
+    return 0;
+}
+```
+
+## 蓝桥杯题号：141. 穿越雷区
+
+```cpp
 #include <iostream>
 #include <queue>
 using namespace std;
-// 蓝桥杯题号：141. 穿越雷区
+// 
 #define MAXN 101
 int g[MAXN][MAXN], v[MAXN][MAXN];
 
@@ -77,3 +139,4 @@ int main()
     cout << bfs(sx, sy, ex, ey);
     return 0;
 }
+```
