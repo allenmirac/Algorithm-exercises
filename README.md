@@ -47,3 +47,6 @@
 `if (is_file) {freopen("xxx.in","r",stdin); freopen("xxx.out","w",stdout);}`:
 
 重定向输入和输出，输入从`xxx.in`文件读取，输出到`xxx.out`文件。
+
+## dp
+动态规划，换硬币哦
