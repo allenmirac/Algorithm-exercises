@@ -1,25 +1,34 @@
 # 换硬币的题型
-蓝桥杯题号：17627. 云神的货币系统
+LeetCode518. 零钱兑换 II
+
+`uint64_t`:刚开始做的时候一直超出`int`的范围，甚至超过了`long long`的范围，最后看题解（代码随想录）才知道是用这个（又有了问题，为什么LeetCode题解用int也可以过）
 
 关键代码：
 ```cpp
-void solve() {
-    int n, x;
-    cin >> n >> x;
-    vi coins(n, 0);
-    rep(i, 0, n-1) {
-        cin >> coins[i];
-    }
-    vi dp(x+1, x+1);
-    dp[0] = 0; // 0元需要0个硬币
-    for(int coin : coins) { // 从coin开始
-        for(int i=coin; i<=x; i++) {
-            dp[i] = min(dp[i], dp[i-coin]+1);//状态转移方程
+class Solution {
+public:
+    int change(int amount, vector<int>& coins) {
+        int n=coins.size();
+        vector<vector<uint64_t>> dp(n, vector<uint64_t>(amount+1, 0));
+        for(int i=0; i<n; i++) dp[i][0]=1;
+        for(int j=0; j<=amount; j++) {
+            if(j>=coins[0]) dp[0][j] = dp[0][j-coins[0]];
         }
+        for(int i=1; i<n; i++) {
+            for(int j=0; j<=amount; j++) {
+                dp[i][j] = dp[i-1][j];
+                if(j>=coins[i]) dp[i][j] += dp[i][j-coins[i]];
+            }
+        }
+        // for(int i=0; i<n; i++) {
+        //     for(int j=0; j<=amount; j++) {
+        //         cout << dp[i][j] << ",";
+        //     }
+        //     cout << endl;
+        // }
+        return dp[n-1][amount];
     }
-    if(dp[x]==x+1) cout << -1 << endl;
-    else cout << dp[x];
-}
+};
 ```
 # 01背包问题
 蓝桥杯题号：303. 求解 01 背包问题
