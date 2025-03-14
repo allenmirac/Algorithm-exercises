@@ -1,29 +1,8 @@
-# 蓝桥杯题号：17627. 云神的货币系统
+# 换硬币的题型
+蓝桥杯题号：17627. 云神的货币系统
 
+关键代码：
 ```cpp
-#include <bits/stdc++.h>
-typedef long long ll;
-typedef unsigned long long u64;
-#define int ll
-#define fi first
-#define se second
-#define pb push_back
-#define mp make_pair
-#define vi vector<int>
-#define vii vector<vector<int>>
-#define SZ(x) (x).size()
-#define pii pair<int,int>
-#define all(x) (x).begin(),(x).end()
-#define rep(i,a,b) for(ll i=(a);i<=(b);i++)
-#define per(i,a,b) for(ll i=(a);i>=(b);i--)
-using namespace std;
-// 蓝桥杯题号：17627. 云神的货币系统
-bool is_mul = 0;
-bool is_file = 0;
-bool is_stdin = 1;
-
-const int N = 100010, mod = 1000000007;
-
 void solve() {
     int n, x;
     cin >> n >> x;
@@ -40,20 +19,6 @@ void solve() {
     }
     if(dp[x]==x+1) cout << -1 << endl;
     else cout << dp[x];
-}
-
-signed main() {
-    if (is_stdin) {ios::sync_with_stdio(0);cin.tie(0);}
-    if (is_file) {freopen("xxx.in","r",stdin);freopen("xxx.out","w",stdout);}
-
-    if(is_mul) {
-        int t;
-        cin >> t;
-        while (t--)
-            solve();
-    } else 
-        solve();
-    return 0;
 }
 ```
 # 01背包问题
@@ -73,28 +38,8 @@ else {
 1. 如果 `j<weight[i]` ，说明剩余容量不足以选择当前第i个物品，最大价值依旧为前`i-1`个物品的最大价值，即`dp[i-1][j]`；
 2. 如果`j>=weight[i]`，说明可以选择第`i`个物品，剩余的容量就剩下`j-weight[i]`，在剩余的容量里取前第`i-1`项的最大价值加上第i项的价值，即可表示选择了第i项的最大价值，即`value[i]+dp[i-1][j-weight[i]]`，然后比较选择第`i`个物品和不选择第`i`个物品的较大值，即为`max(value[i]+dp[i-1][j-weight[i]], dp[i-1][j])`。
 
+关键代码：
 ```cpp
-#include <bits/stdc++.h>
-typedef long long ll;
-typedef unsigned long long u64;
-#define int ll
-#define fi first
-#define se second
-#define pb push_back
-#define mp make_pair
-#define vi vector<int>
-#define vii vector<vector<int>>
-#define SZ(x) (x).size()
-#define pii pair<int,int>
-#define all(x) (x).begin(),(x).end()
-#define rep(i,a,b) for(ll i=(a);i<=(b);i++)
-#define per(i,a,b) for(ll i=(a);i>=(b);i--)
-using namespace std;
-
-bool is_mul = 0;
-bool is_file = 0;
-bool is_stdin = 1;
-
 const int N = 10010, mod = 1e9+7;
 ll dp[1001][1001];
 void solve() {
@@ -120,20 +65,6 @@ void solve() {
     // }
     cout << dp[n][total] << endl;
 }
-
-signed main() {
-    if (is_stdin) {ios::sync_with_stdio(0);cin.tie(0);}
-    if (is_file) {freopen("xxx.in","r",stdin);freopen("xxx.out","w",stdout);}
-
-    if(is_mul) {
-        int t;
-        cin >> t;
-        while (t--)
-            solve();
-    } else 
-        solve();
-    return 0;
-}
 ```
 # 完全背包问题
 
@@ -143,28 +74,8 @@ signed main() {
 
 与上面代码的区别，仅在于`dp[i][j] = max(value[i]+dp[i][j-weight[i]], dp[i-1][j]);`，max函数中的前者为`value[i]+dp[i][j-weight[i]]`，表示在选择第`i`个物品时，在剩余的容量里取前第`i`项的最大价值加上第`i`项的价值，即可表示选择了第`i`项的最大价值。
 
+关键代码:
 ```cpp
-#include <bits/stdc++.h>
-typedef long long ll;
-typedef unsigned long long u64;
-#define int ll
-#define fi first
-#define se second
-#define pb push_back
-#define mp make_pair
-#define vi vector<int>
-#define vii vector<vector<int>>
-#define SZ(x) (x).size()
-#define pii pair<int,int>
-#define all(x) (x).begin(),(x).end()
-#define rep(i,a,b) for(ll i=(a);i<=(b);i++)
-#define per(i,a,b) for(ll i=(a);i>=(b);i--)
-using namespace std;
-
-bool is_mul = 0;
-bool is_file = 0;
-bool is_stdin = 1;
-
 const int N = 10010, mod = 1e9+7;
 ll dp[1001][1001];
 void solve() {
@@ -190,18 +101,40 @@ void solve() {
     // }
     cout << dp[n][total] << endl;;
 }
+```
 
-signed main() {
-    if (is_stdin) {ios::sync_with_stdio(0);cin.tie(0);}
-    if (is_file) {freopen("xxx.in","r",stdin);freopen("xxx.out","w",stdout);}
+# 三维DP数组
+LeetCode474. 一和零
 
-    if(is_mul) {
-        int t;
-        cin >> t;
-        while (t--)
-            solve();
-    } else 
-        solve();
-    return 0;
-}
+`dp[i][j][k]`的含义：在下标为[0, i]范围内的字符串，满足0的数量<=j，并且1的数量<=k的最大字符串长度。
+
+关键代码：
+```cpp
+class Solution {
+public:
+    int findMaxForm(vector<string>& strs, int m, int n) {
+        int strSize = strs.size();
+        vector<vector<int>> numsZeOne(strSize, vector<int>(2, 0));
+        vector<vector<vector<int>>> dp(strSize+1, vector<vector<int>>(m+1, vector<int>(n+1, 0)));
+        for(int i=0; i<strSize; i++) {
+            string s = strs[i];
+            int size = s.size();
+            for(int j=0; j<size; j++){
+                if(s[j] == '0') {
+                    numsZeOne[i][0]++;
+                } else numsZeOne[i][1]++;
+            }
+            // cout << "0:" << numsZeOne[i][0] << ",1:" << numsZeOne[i][1] << endl;
+            for(int j=0; j<=m; j++) {
+                for(int k=0; k<=n; k++) {
+                    dp[i+1][j][k] = dp[i][j][k];
+                    if(j>=numsZeOne[i][0] && k>=numsZeOne[i][1]) {
+                        dp[i+1][j][k] = max(dp[i][j][k], dp[i][j-numsZeOne[i][0]][k-numsZeOne[i][1]]+1);
+                    }
+                }
+            }
+        }        
+        return dp[strSize][m][n];
+    }
+};
 ```
