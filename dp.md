@@ -1,5 +1,5 @@
 # 换硬币的题型
-LeetCode518. 零钱兑换 II
+## LeetCode518. 零钱兑换 II
 
 `uint64_t`:刚开始做的时候一直超出`int`的范围，甚至超过了`long long`的范围，最后看题解（代码随想录）才知道是用这个（又有了问题，为什么LeetCode题解用int也可以过）
 
@@ -30,6 +30,78 @@ public:
     }
 };
 ```
+
+## LeetCode322. 零钱兑换
+
+注意点：最开始的初始化也很重要，直接影响状态转移
+
+解释为什么初始化为INT_MAX?
+
+1. 初始化为0，其实不是一个初始状态，因为状态转移方程在取`min`的时候，0会错误的成为那一个较小值，所以`dp[i][j]`不符合最优的子结构。
+
+2. 看题目有“**最少的硬币个数**”字眼，可以考虑初始化为`INT_MAX`.
+
+二维DP：
+```cpp
+class Solution {
+public:
+    int coinChange(vector<int>& coins, int amount) {
+        int n=coins.size();
+        if(amount==0) return 0;
+        vector<vector<int>> dp(n, vector<int>(amount+1, INT_MAX));
+        for(int j=0; j<amount+1; j++) {
+            if(j%coins[0]==0) dp[0][j] = j/coins[0];
+        }
+        for(int i=1; i<n; i++) {
+            for(int j=0; j<=amount; j++) {
+                dp[i][j] = dp[i-1][j];
+                if(j>=coins[i] && dp[i][j-coins[i]]!=INT_MAX) dp[i][j] = min(dp[i-1][j], dp[i][j-coins[i]]+1);
+                // cout << dp[i][j] << ",";
+            }
+            // cout << endl;
+        }
+        // for(int i=0; i<n; i++) {
+        //     for(int j=0; j<=amount; j++) {
+        //         cout << dp[i][j] << ",";
+        //     }
+        //     cout << endl;
+        // }
+        if(dp[n-1][amount] != INT_MAX) return dp[n-1][amount];
+        else return -1;
+    }
+};
+```
+
+一维DP:
+```cpp
+class Solution {
+public:
+    int coinChange(vector<int>& coins, int amount) {
+        int n = coins.size();
+        if (amount == 0)
+            return 0;
+        vector<int> dp(amount + 1, INT_MAX);
+        for (int i = 0; i < amount + 1; i++) {
+            if (i % coins[0] == 0)
+                dp[i] = i / coins[0];
+        }
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j <= amount; j++) {
+                dp[j] =
+                    dp[j]; // dp[i][j] = dp[i-1][j]; 取代了初始化，变成一维之后，可以去掉
+                if (j >= coins[i] && dp[j - coins[i]] != INT_MAX)
+                    dp[j] = min(dp[j], dp[j - coins[i]] + 1);
+            }
+        }
+        if (dp[amount] != INT_MAX)
+            return dp[amount];
+        else
+            return -1;
+    }
+};
+```
+
+
 # 01背包问题
 蓝桥杯题号：303. 求解 01 背包问题
 
