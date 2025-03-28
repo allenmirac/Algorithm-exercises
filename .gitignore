@@ -6,3 +6,9 @@
 !*/
 
 .vscode/
+.idea/
+venv/
+
+*.exe
+*.log
+*.tmp
