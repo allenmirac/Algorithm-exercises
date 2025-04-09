@@ -4,7 +4,7 @@
 
 比如在这个示例中，`{5,6,7,4,3}`，前三个是升序的，只会生成基于这前三个的全排列（55个），而不会生成完整的全排列（120个）。
 
-正确使用 next_permutation 的姿势是：必须先将输入排序为最小字典序，即：
+正确使用 `next_permutation` 的姿势是：必须先将输入排序为最小字典序，即：
 ```cpp
 sort(nums.begin(), nums.end());
 ```
@@ -44,5 +44,24 @@ void solve() {
 		cout << endl;
 	}
 	cout << "Count: " << count << endl;;
+}
+```
+
+Leetcode47. 全排列-ii
+
+```cpp
+void backtrace(vector<vector<int>>& res, int start, vector<int>& nums) {
+	if(start == nums.size()) {
+		res.push_back(nums);
+		return ;
+	}
+	unordered_set<int> st;
+	for(int i=start; i<nums.size(); i++) {
+		if(st.count(nums[i])) continue;
+		st.insert(nums[i]);
+		swap(nums[start], nums[i]);
+		backtrace(res, start+1, nums);
+		swap(nums[start], nums[i]);
+	}
 }
 ```
