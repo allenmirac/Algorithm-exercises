@@ -90,3 +90,84 @@ int main()
     return 0;
 }
 ```
+## 题目三：Leetcode200. 岛屿数量
+
+1. DFS写法
+
+DFS函数在开始写的时候就需要考虑终止递归的条件！！
+
+```cpp
+class Solution {
+public:
+    void dfs(vector<vector<char>>& vG, int si, int sj) {
+        int m = vG.size(), n = vG[0].size();
+        vG[si][sj]='0';
+        if(si>=0 && si<m && sj>=0 && sj<n) {
+	        if (si - 1 >= 0 && vG[si - 1][sj] == '1')
+	            dfs(vG, si - 1, sj);
+	        if (sj - 1 >= 0 && vG[si][sj - 1] == '1')
+	            dfs(vG, si, sj - 1);
+	        if (si + 1 < m && vG[si + 1][sj] == '1')
+	            dfs(vG, si + 1, sj);
+	        if (sj + 1 < n && vG[si][sj + 1] == '1')
+	            dfs(vG, si, sj + 1);
+	    }
+    }
+    int numIslands(vector<vector<char>>& grid) {
+        int m = grid.size();
+        if(m==0) return 0;
+        int n = grid[0].size();
+        int ans = 0;
+        vector<vector<bool>> vis(m, vector<bool>(n, false));
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == '1') {
+                    dfs(grid, i, j);
+                    ans++;
+                }
+            }
+        }
+        return ans;
+    }
+};
+```
+2. BFS写法
+
+```cpp
+class Solution {
+public:
+    struct node {
+        int x, y;
+    };
+    int numIslands(vector<vector<char>>& grid) {
+        int m = grid.size();
+        if(m==0) return 0;
+        int n = grid[0].size();
+        int ans = 0;
+        int dx[] = {0, 0, -1, 1};
+        int dy[] = {1, -1, 0, 0};
+        vector<vector<bool>> vis(m, vector<bool>(n, false));
+        // queue<node> que;
+        for(int i=0; i<m; i++) {
+            for(int j=0; j<n; j++) {
+                queue<node> que;
+                if(grid[i][j]=='1') {
+                    que.push({i, j});
+                    while(!que.empty()) {
+                        node f = que.front(); que.pop();
+                        for(int i=0; i<4; i++) {
+                            int nx = f.x+dx[i], ny = f.y+dy[i];
+                            if(nx>=0 && nx<m && ny>=0 && ny<n && grid[nx][ny]=='1') {
+                                que.push({nx, ny});
+                                grid[nx][ny]='0';
+                            }
+                        }
+                    }
+                    ans++;
+                }
+            }
+        }        
+        return ans;
+    }
+};
+```
